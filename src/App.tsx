@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Moon, Sun, Plus, List, History, Share2, LogOut, Menu } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Moon, Sun, LogOut, Menu } from 'lucide-react';
 import ShoppingList from './components/ShoppingList';
 import Sidebar from './components/Sidebar';
 import Auth from './components/Auth';
