@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Search, Plus, Loader2, Trash2, ChevronDown, ChevronRight } from 'lucide-react';
 import Parse from '../parseConfig';
 import { ShoppingList as ShoppingListModel, ShoppingItem, CATEGORIES, Category } from '../models/ShoppingList';
+import debounce from 'lodash/debounce';
 
 interface ShoppingListProps {
   isDarkMode: boolean;
@@ -20,6 +21,10 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
   const [error, setError] = useState<string | null>(null);
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set(Object.values(CATEGORIES)));
   const [selectedCategory, setSelectedCategory] = useState<Category>(CATEGORIES.AUTRES);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [ingredientsCache, setIngredientsCache] = useState<Map<string, string[]>>(new Map());
 
   useEffect(() => {
     if (currentList) {
@@ -69,6 +74,91 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
       setError('Erreur lors de la sauvegarde de la liste');
       setItems(currentListObj.getItems() || []);
     }
+  };
+
+  const fetchSuggestions = useCallback(
+    debounce(async (query: string) => {
+      if (!query.trim()) {
+        setSuggestions([]);
+        return;
+      }
+
+      // Check if user is logged in
+      const currentUser = Parse.User.current();
+      if (!currentUser) {
+        console.error('User not logged in');
+        return;
+      }
+
+      // Check cache first
+      const cachedSuggestions = ingredientsCache.get(query.toLowerCase());
+      if (cachedSuggestions) {
+        setSuggestions(cachedSuggestions);
+        return;
+      }
+
+      try {
+        setIsLoadingSuggestions(true);
+        const Ingredient = Parse.Object.extend('Ingredient');
+        const queryObj = new Parse.Query(Ingredient);
+        
+        // Create an OR query for the three fields
+        const nameQuery = new Parse.Query(Ingredient);
+        nameQuery.startsWith('name', query.toLowerCase());
+        
+        const pluralQuery = new Parse.Query(Ingredient);
+        pluralQuery.startsWith('plural', query.toLowerCase());
+        
+        const displayPluralQuery = new Parse.Query(Ingredient);
+        displayPluralQuery.startsWith('displayPlural', query.toLowerCase());
+        
+        queryObj._orQuery([nameQuery, pluralQuery, displayPluralQuery]);
+        queryObj.limit(5); // Limit to 5 suggestions
+        queryObj.select('name'); // Only select the name field
+        
+        const results = await queryObj.find();
+        
+        const newSuggestions = results.map(ingredient => ingredient.get('name'));
+        setSuggestions(newSuggestions);
+        
+        // Update cache
+        setIngredientsCache(prev => {
+          const newCache = new Map(prev);
+          newCache.set(query.toLowerCase(), newSuggestions);
+          return newCache;
+        });
+      } catch (error) {
+        console.error('Error fetching suggestions:', error);
+        if (error instanceof Parse.Error) {
+          if (error.code === 119) { // Parse.Error.INVALID_SESSION_TOKEN
+            // Handle session token error (user needs to log in again)
+            setError('Votre session a expiré. Veuillez vous reconnecter.');
+          } else if (error.code === 209) { // Parse.Error.INVALID_ACL
+            setError('Vous n\'avez pas les permissions nécessaires.');
+          } else {
+            setError('Erreur lors de la recherche d\'ingrédients.');
+          }
+        } else {
+          setError('Erreur lors de la recherche d\'ingrédients.');
+        }
+      } finally {
+        setIsLoadingSuggestions(false);
+      }
+    }, 300), // 300ms debounce
+    [ingredientsCache]
+  );
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setNewItem(value);
+    fetchSuggestions(value);
+    setShowSuggestions(true);
+  };
+
+  const handleSuggestionClick = (suggestion: string) => {
+    setNewItem(suggestion);
+    setSuggestions([]);
+    setShowSuggestions(false);
   };
 
   const addItem = async (e: React.FormEvent) => {
@@ -165,7 +255,9 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
             <input
               type="text"
               value={newItem}
-              onChange={(e) => setNewItem(e.target.value)}
+              onChange={handleInputChange}
+              onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
+              onFocus={() => setShowSuggestions(true)}
               placeholder="Ajouter un article..."
               className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
                 isDarkMode 
@@ -174,6 +266,31 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
               } focus:outline-none focus:ring-2 focus:ring-primary-500`}
             />
             <Search className={`absolute left-3 top-2.5 h-5 w-5 ${isDarkMode ? 'text-gray-400' : 'text-surface-400'}`} />
+            
+            {showSuggestions && (suggestions.length > 0 || isLoadingSuggestions) && (
+              <div className={`absolute z-10 w-full mt-1 rounded-lg shadow-lg ${
+                isDarkMode ? 'bg-gray-800' : 'bg-element'
+              }`}>
+                {isLoadingSuggestions ? (
+                  <div className="p-2 flex justify-center">
+                    <Loader2 className="h-4 w-4 animate-spin text-primary-500" />
+                  </div>
+                ) : (
+                  suggestions.map((suggestion, index) => (
+                    <button
+                      key={index}
+                      type="button"
+                      onClick={() => handleSuggestionClick(suggestion)}
+                      className={`w-full text-left px-4 py-2 hover:bg-surface-100 dark:hover:bg-gray-700 ${
+                        isDarkMode ? 'text-white' : 'text-surface-900'
+                      }`}
+                    >
+                      {suggestion}
+                    </button>
+                  ))
+                )}
+              </div>
+            )}
           </div>
           <select
             value={selectedCategory}

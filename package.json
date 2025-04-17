@@ -11,7 +11,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@types/lodash": "^4.17.16",
     "events": "^3.3.0",
+    "lodash": "^4.17.21",
     "lucide-react": "^0.284.0",
     "parse": "^6.2.0-alpha.2",
     "react": "^18.2.0",
