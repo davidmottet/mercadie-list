@@ -44,9 +44,9 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
       const results = await query.find();
       
       const listsData = results.map(list => ({
-        id: list.id,
+        id: list.id || '',
         name: list.getName()
-      }));
+      })) as ListItem[];
       
       setLists(listsData);
       
@@ -81,7 +81,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
       const newList = new ShoppingList();
       newList.setName(newListName.trim());
       newList.setItems([]);
-      newList.setOwner(currentUser);
+      newList.setOwner(currentUser as any);
 
       const acl = new Parse.ACL(currentUser);
       newList.setACL(acl);
@@ -91,7 +91,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
       setIsCreating(false);
       setNewListName('');
       await loadLists();
-      setCurrentList(newList.id);
+      setCurrentList(newList.id || null);
     } catch (error) {
       console.error('Error creating new list:', error);
     }
@@ -118,7 +118,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
       const list = await query.get(listId);
 
       if (list.getOwner().id !== currentUser.id) {
-        throw new Error("Vous n'avez pas les droits pour modifier cette liste");
+        throw new Error("You don't have permission to modify this list");
       }
 
       list.setName(editingName[listId].trim());
@@ -143,7 +143,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
       const list = await query.get(listId);
 
       if (list.getOwner().id !== currentUser.id) {
-        throw new Error("Vous n'avez pas les droits pour supprimer cette liste");
+        throw new Error("You don't have permission to delete this list");
       }
 
       await list.destroy();
@@ -181,7 +181,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
                 type="text"
                 value={newListName}
                 onChange={(e) => setNewListName(e.target.value)}
-                placeholder="Nom de la liste..."
+                placeholder="List name..."
                 className="w-full px-3 py-2 border border-surface-200 dark:border-gray-600 rounded-lg 
                          dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
                 autoFocus
@@ -193,7 +193,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
                            flex items-center justify-center space-x-1"
                 >
                   <Check size={16} />
-                  <span>Créer</span>
+                  <span>Create</span>
                 </button>
                 <button
                   type="button"
@@ -202,7 +202,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
                            text-surface-800 dark:text-gray-200 px-3 py-2 rounded-lg flex items-center justify-center space-x-1"
                 >
                   <X size={16} />
-                  <span>Annuler</span>
+                  <span>Cancel</span>
                 </button>
               </div>
             </form>
@@ -213,7 +213,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
                        text-white px-4 py-2 rounded-lg transition-colors"
             >
               <Plus size={20} />
-              <span>Nouvelle liste</span>
+              <span>New list</span>
             </button>
           )
         ) : (
@@ -264,19 +264,19 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
                 </div>
               ) : deletingList === list.id ? (
                 <div className="flex items-center justify-between space-x-2">
-                  <span className="text-sm text-red-600 dark:text-red-400">Supprimer la liste ?</span>
+                  <span className="text-sm text-red-600 dark:text-red-400">Delete the list?</span>
                   <div className="flex space-x-1">
                     <button
                       onClick={() => deleteList(list.id)}
-                      className="p-1 hover:bg-red-100 dark:hover:bg-red-900/20 rounded"
+                      className="p-1 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/20 rounded"
                     >
-                      <Check size={16} className="text-red-600 dark:text-red-400" />
+                      <Check size={16} />
                     </button>
                     <button
                       onClick={() => setDeletingList(null)}
-                      className="p-1 hover:bg-surface-100 dark:hover:bg-gray-700 rounded"
+                      className="p-1 text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700/20 rounded"
                     >
-                      <X size={16} className="text-surface-600 dark:text-gray-400" />
+                      <X size={16} />
                     </button>
                   </div>
                 </div>

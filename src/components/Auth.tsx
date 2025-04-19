@@ -48,7 +48,7 @@ const Auth: React.FC<AuthProps> = ({ onLogin, isDarkMode }) => {
     <div className={`min-h-screen flex items-center justify-center px-4 ${isDarkMode ? 'bg-gray-900' : 'bg-app'}`}>
       <div className={`w-full max-w-md p-8 rounded-lg shadow-soft ${isDarkMode ? 'bg-gray-800' : 'bg-element'}`}>
         <h2 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-surface-900'}`}>
-          {isLogin ? 'Connexion' : 'Inscription'}
+          {isLogin ? 'Login' : 'Sign Up'}
         </h2>
 
         {error && (
@@ -84,7 +84,7 @@ const Auth: React.FC<AuthProps> = ({ onLogin, isDarkMode }) => {
 
           <div>
             <label htmlFor="password" className={`block text-sm font-medium ${isDarkMode ? 'text-gray-200' : 'text-surface-700'}`}>
-              Mot de passe
+              Password
             </label>
             <input
               type="password"
@@ -107,12 +107,12 @@ const Auth: React.FC<AuthProps> = ({ onLogin, isDarkMode }) => {
             {isLogin ? (
               <>
                 <LogIn size={20} />
-                <span>Se connecter</span>
+                <span>Login</span>
               </>
             ) : (
               <>
                 <UserPlus size={20} />
-                <span>S'inscrire</span>
+                <span>Sign Up</span>
               </>
             )}
           </button>
@@ -123,7 +123,7 @@ const Auth: React.FC<AuthProps> = ({ onLogin, isDarkMode }) => {
             onClick={() => setIsLogin(!isLogin)}
             className={`text-sm ${isDarkMode ? 'text-primary-400' : 'text-primary-600'} hover:underline`}
           >
-            {isLogin ? "Pas encore de compte ? S'inscrire" : "Déjà un compte ? Se connecter"}
+            {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login"}
           </button>
         </div>
       </div>

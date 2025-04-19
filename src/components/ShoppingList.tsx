@@ -56,7 +56,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
       }
     } catch (error) {
       console.error('Error loading list:', error);
-      setError('Erreur lors du chargement de la liste');
+      setError('Error loading the list');
     } finally {
       setLoading(false);
     }
@@ -71,7 +71,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
       setItems(newItems);
     } catch (error) {
       console.error('Error saving list:', error);
-      setError('Erreur lors de la sauvegarde de la liste');
+      setError('Error saving the list');
       setItems(currentListObj.getItems() || []);
     }
   };
@@ -132,14 +132,14 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
         if (error instanceof Parse.Error) {
           if (error.code === 119) { // Parse.Error.INVALID_SESSION_TOKEN
             // Handle session token error (user needs to log in again)
-            setError('Votre session a expiré. Veuillez vous reconnecter.');
+            setError('Your session has expired. Please log in again.');
           } else if (error.code === 209) { // Parse.Error.INVALID_ACL
-            setError('Vous n\'avez pas les permissions nécessaires.');
+            setError('You do not have the necessary permissions.');
           } else {
-            setError('Erreur lors de la recherche d\'ingrédients.');
+            setError('Error searching for ingredients.');
           }
         } else {
-          setError('Erreur lors de la recherche d\'ingrédients.');
+          setError('Error searching for ingredients.');
         }
       } finally {
         setIsLoadingSuggestions(false);
@@ -194,7 +194,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
       await saveList(newItems);
     } catch (error) {
       console.error('Error deleting item:', error);
-      setError('Erreur lors de la suppression de l\'article');
+      setError('Error deleting the item');
     }
   };
 
@@ -233,7 +233,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
     return (
       <div className="flex items-center justify-center h-full">
         <div className={`text-center ${isDarkMode ? 'text-gray-400' : 'text-surface-600'}`}>
-          <p>Sélectionnez une liste ou créez-en une nouvelle</p>
+          <p>Select a list or create a new one</p>
         </div>
       </div>
     );
@@ -258,7 +258,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
               onChange={handleInputChange}
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               onFocus={() => setShowSuggestions(true)}
-              placeholder="Ajouter un article..."
+              placeholder="Add an item..."
               className={`w-full pl-10 pr-4 py-2 rounded-lg border ${
                 isDarkMode 
                   ? 'bg-gray-800 border-gray-700 text-white placeholder-gray-400' 
@@ -312,7 +312,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
             className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 flex items-center space-x-2"
           >
             <Plus size={20} />
-            <span>Ajouter</span>
+            <span>Add</span>
           </button>
         </form>
       </div>

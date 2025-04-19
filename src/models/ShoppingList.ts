@@ -8,14 +8,14 @@ export interface ShoppingItem {
 }
 
 export const CATEGORIES = {
-  FRUITS_LEGUMES: 'Fruits et Légumes',
-  VIANDES: 'Viandes et Poissons',
-  EPICERIE: 'Épicerie',
-  BOISSONS: 'Boissons',
-  PRODUITS_LAITIERS: 'Produits Laitiers',
-  SURGELES: 'Surgelés',
-  HYGIENE: 'Hygiène',
-  AUTRES: 'Autres'
+  FRUITS_LEGUMES: 'Fruits and Vegetables',
+  VIANDES: 'Meat and Fish',
+  EPICERIE: 'Groceries',
+  BOISSONS: 'Beverages',
+  PRODUITS_LAITIERS: 'Dairy Products',
+  SURGELES: 'Frozen Foods',
+  HYGIENE: 'Hygiene',
+  AUTRES: 'Others'
 } as const;
 
 export type Category = typeof CATEGORIES[keyof typeof CATEGORIES];

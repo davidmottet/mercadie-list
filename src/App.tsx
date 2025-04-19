@@ -56,10 +56,10 @@ function App() {
                 <Menu size={20} />
               </button>
               <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-surface-900'}`}>
-                Liste Parfaite
+                Perfect List
               </h1>
               <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-surface-600'}`}>
-                L'essentiel, simplement
+                The essentials, simply
               </span>
             </div>
             <div className="flex items-center space-x-4">
