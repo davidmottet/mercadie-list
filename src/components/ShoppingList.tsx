@@ -321,51 +321,71 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
       </div>
 
       <div className="flex-1 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6">
-        {Object.entries(groupedItems).map(([category, categoryItems]) => (
-          <div key={category}>
-            <button
-              onClick={() => toggleCategory(category)}
-              className={`w-full flex items-center justify-between px-4 ${
-                isDarkMode ? 'bg-gray-700' : 'bg-white'
-              } rounded-lg mb-2`}
-            >
-              <span className="font-medium">{category} ({categoryItems.length})</span>
-              <button
-                onClick={() => setIsExpanded(!isExpanded)}
-                className="p-2 rounded-full hover:bg-surface-100 dark:hover:bg-gray-700"
-              >
-                <span className="text-xl">{expandedCategories.has(category) ? '⬇️' : '➡️'}</span>
-              </button>
-            </button>
-            
-            {expandedCategories.has(category) && (
-              <div className="mb-6">
-                {categoryItems.map(item => (
-                  <div
-                    key={item.id}
-                    className="flex items-center px-4 py-1 hover:bg-surface-50 dark:hover:bg-gray-700/50 rounded-lg"
-                  >
-                    <input
-                      type="checkbox"
-                      checked={item.checked}
-                      onChange={() => toggleItem(item.id)}
-                      className="h-4 w-4 rounded border-surface-300 text-primary-600 focus:ring-primary-500"
-                    />
-                    <span className={`flex-1 ml-3 ${item.checked ? 'line-through text-surface-500' : ''}`}>
-                      {item.name}
-                    </span>
-                    <button
-                      onClick={() => deleteItem(item.id)}
-                      className="p-2 rounded-full hover:bg-surface-100 dark:hover:bg-gray-700"
-                    >
-                      <span className="text-xl">🗑️</span>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            )}
+        <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
+          <span>🛒</span>
+          Shopping List
+        </h2>
+        {Object.keys(groupedItems).length === 0 ? (
+          <div className="text-center py-8">
+            <p className="text-lg text-gray-500 dark:text-gray-400 mb-2">Your cart is empty!</p>
+            <p className="text-sm text-gray-400 dark:text-gray-500">Time to fill it up with goodies! 🍎🥕🥛</p>
           </div>
-        ))}
+        ) : (
+          Object.entries(groupedItems).map(([category, categoryItems]) => (
+            <div key={category}>
+              <button
+                onClick={() => toggleCategory(category)}
+                className={`w-full flex items-center justify-between px-4 ${
+                  isDarkMode ? 'bg-gray-700' : 'bg-white'
+                } rounded-lg mb-2`}
+              >
+                <span className="font-medium">{category} ({categoryItems.length})</span>
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="p-2 rounded-full hover:bg-surface-100 dark:hover:bg-gray-700"
+                >
+                  <span className="text-xl">{expandedCategories.has(category) ? '⬇️' : '➡️'}</span>
+                </button>
+              </button>
+              
+              {expandedCategories.has(category) && (
+                <div className="mb-6">
+                  {categoryItems.map(item => (
+                    <div
+                      key={item.id}
+                      className="flex items-center px-4 py-1 hover:bg-surface-50 dark:hover:bg-gray-700/50 rounded-lg"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={item.checked}
+                        onChange={() => toggleItem(item.id)}
+                        className="h-4 w-4 rounded border-surface-300 text-primary-600 focus:ring-primary-500"
+                      />
+                      <span className={`flex-1 ml-3 ${item.checked ? 'line-through text-surface-500' : ''}`}>
+                        {item.name}
+                      </span>
+                      <button
+                        onClick={() => deleteItem(item.id)}
+                        className="p-2 rounded-full hover:bg-surface-100 dark:hover:bg-gray-700"
+                      >
+                        <span className="text-xl">🗑️</span>
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ))
+        )}
+        <div className="mt-8 flex justify-center">
+          <button
+            disabled
+            className="btn-secondary opacity-50 cursor-not-allowed flex items-center gap-2 px-8 py-4 text-lg"
+          >
+            <span className="text-2xl">🛍️</span>
+            Shop Now
+          </button>
+        </div>
       </div>
     </div>
   );
