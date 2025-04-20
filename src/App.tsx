@@ -31,64 +31,67 @@ function App() {
 
   return (
     <div className={`min-h-screen ${isDarkMode ? 'dark bg-gray-900' : 'bg-app'}`}>
-      <div className="flex h-screen">
-        {/* Sidebar */}
-        <Sidebar 
-          currentList={currentList} 
-          setCurrentList={setCurrentList} 
-          isExpanded={isSidebarExpanded}
-        />
+      <div className="container mx-auto px-4 md:px-0">
+        <div className="flex flex-col xl:flex-row gap-6 py-6">
+          {/* Sidebar */}
+          <Sidebar 
+            currentList={currentList} 
+            setCurrentList={setCurrentList} 
+            isExpanded={isSidebarExpanded}
+          />
+          {/* Main Content */}
+          <div className="flex-1">
+            {/* Header */}
+            <header className={`p-4 flex items-center justify-between border-b rounded-t-lg ${
+              isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-surface-200 bg-element'
+            }`}>
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
+                  className={`p-2 rounded-full ${
+                    isDarkMode 
+                      ? 'hover:bg-gray-700 text-gray-300' 
+                      : 'hover:bg-surface-100 text-surface-600'
+                  }`}
+                >
+                  <span className="text-xl">☰</span>
+                </button>
+                <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-surface-900'}`}>
+                  Perfect List
+                </h1>
+                <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-surface-600'}`}>
+                  The essentials, simply
+                </span>
+              </div>
+              <div className="flex items-center space-x-4">
+                <button
+                  onClick={toggleDarkMode}
+                  className={`p-2 rounded-full ${
+                    isDarkMode 
+                      ? 'hover:bg-gray-700 text-gray-300' 
+                      : 'hover:bg-surface-100 text-surface-600'
+                  }`}
+                >
+                  <span className="text-xl">{isDarkMode ? '☀️' : '🌙'}</span>
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className={`p-2 rounded-full ${
+                    isDarkMode 
+                      ? 'hover:bg-gray-700 text-gray-300' 
+                      : 'hover:bg-surface-100 text-surface-600'
+                  }`}
+                >
+                  <span className="text-xl">🚪</span>
+                </button>
+              </div>
+            </header>
 
-        {/* Main Content */}
-        <div className="flex-1 flex flex-col">
-          {/* Header */}
-          <header className={`p-4 flex items-center justify-between border-b ${isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-surface-200 bg-element'}`}>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
-                className={`p-2 rounded-full ${
-                  isDarkMode 
-                    ? 'hover:bg-gray-700 text-gray-300' 
-                    : 'hover:bg-surface-100 text-surface-600'
-                }`}
-              >
-                <span className="text-xl">☰</span>
-              </button>
-              <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-surface-900'}`}>
-                Perfect List
-              </h1>
-              <span className={`text-sm ${isDarkMode ? 'text-gray-400' : 'text-surface-600'}`}>
-                The essentials, simply
-              </span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <button
-                onClick={toggleDarkMode}
-                className={`p-2 rounded-full ${
-                  isDarkMode 
-                    ? 'hover:bg-gray-700 text-gray-300' 
-                    : 'hover:bg-surface-100 text-surface-600'
-                }`}
-              >
-                <span className="text-xl">{isDarkMode ? '☀️' : '🌙'}</span>
-              </button>
-              <button
-                onClick={handleLogout}
-                className={`p-2 rounded-full ${
-                  isDarkMode 
-                    ? 'hover:bg-gray-700 text-gray-300' 
-                    : 'hover:bg-surface-100 text-surface-600'
-                }`}
-              >
-                <span className="text-xl">🚪</span>
-              </button>
-            </div>
-          </header>
-
-          {/* Main Content Area */}
-          <main className="flex-1 overflow-auto p-6">
-            <ShoppingList isDarkMode={isDarkMode} currentList={currentList} />
-          </main>
+            {/* Main Content Area */}
+            <main className="overflow-auto p-6">
+              <ShoppingList isDarkMode={isDarkMode} currentList={currentList} />
+            </main>
+          </div>
         </div>
       </div>
     </div>

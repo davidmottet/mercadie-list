@@ -164,14 +164,14 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
 
   if (loading) {
     return (
-      <div className={`${isExpanded ? 'w-64' : 'w-16'} bg-element dark:bg-gray-800 border-r border-surface-200 dark:border-gray-700 flex items-center justify-center h-screen transition-all duration-300`}>
+      <div className="w-full xl:w-80 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 flex items-center justify-center">
         <span className="text-2xl animate-spin">🔄</span>
       </div>
     );
   }
 
   return (
-    <div className={`${isExpanded ? 'w-64' : 'w-16'} bg-element dark:bg-gray-800 border-r border-surface-200 dark:border-gray-700 transition-all duration-300`}>
+    <div className={`w-full xl:w-80 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-all duration-300`}>
       <div className="p-4">
         {isExpanded ? (
           isCreating ? (
@@ -302,13 +302,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
                       onClick={() => startEditing(list)}
                       className="p-1 hover:bg-surface-100 dark:hover:bg-gray-600 rounded"
                     >
-                      <span className="text-lg">📝</span>
+                      <span className="text-xl">📝</span>
                     </button>
                     <button
                       onClick={() => setDeletingList(list.id)}
                       className="p-1 hover:bg-surface-100 dark:hover:bg-gray-600 rounded"
                     >
-                      <span className="text-lg">🗑️</span>
+                      <span className="text-xl">🗑️</span>
                     </button>
                   </div>
                 </div>
