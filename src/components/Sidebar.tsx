@@ -174,33 +174,33 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList }) => {
       <div className="p-4">
         {isCreating ? (
           <form onSubmit={createNewList} className="space-y-2">
-            <input
-              type="text"
-              value={newListName}
-              onChange={(e) => setNewListName(e.target.value)}
-              placeholder="List name..."
-              className="w-full px-3 py-2 border border-surface-200 dark:border-gray-600 rounded-lg 
-                       dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-              autoFocus
-            />
-            <div className="flex space-x-2">
-              <button
-                type="submit"
-                className="flex-1 bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-lg 
-                         flex items-center justify-center space-x-1"
-              >
-                <span className="text-xl">✅</span>
-                <span>Create</span>
-              </button>
-              <button
-                type="button"
-                onClick={cancelCreatingList}
-                className="flex-1 bg-surface-100 dark:bg-gray-600 hover:bg-surface-200 dark:hover:bg-gray-500 
-                         text-surface-800 dark:text-gray-200 px-3 py-2 rounded-lg flex items-center justify-center space-x-1"
-              >
-                <span className="text-xl">❌</span>
-                <span>Cancel</span>
-              </button>
+            <div className="relative">
+              <input
+                type="text"
+                value={newListName}
+                onChange={(e) => setNewListName(e.target.value)}
+                placeholder="List name..."
+                className="w-full px-3 py-2 pr-24 border border-surface-200 dark:border-gray-600 rounded-lg 
+                         dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                autoFocus
+              />
+              <div className="absolute right-0 top-0 h-full flex">
+                <button
+                  type="submit"
+                  className="h-full px-3 bg-primary-600 hover:bg-primary-700 text-white 
+                           flex items-center justify-center"
+                >
+                  <span className="text-xl">✅</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={cancelCreatingList}
+                  className="h-full px-3 bg-surface-100 dark:bg-gray-600 hover:bg-surface-200 rounded-r-lg dark:hover:bg-gray-500 
+                           text-surface-800 dark:text-gray-200 flex items-center justify-center"
+                >
+                  <span className="text-xl">❌</span>
+                </button>
+              </div>
             </div>
           </form>
         ) : (
