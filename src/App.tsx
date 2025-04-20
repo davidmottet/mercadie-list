@@ -8,7 +8,6 @@ function App() {
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [currentList, setCurrentList] = useState<string | null>(null);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true);
 
   useEffect(() => {
     const currentUser = Parse.User.current();
@@ -37,7 +36,6 @@ function App() {
           <Sidebar 
             currentList={currentList} 
             setCurrentList={setCurrentList} 
-            isExpanded={isSidebarExpanded}
           />
           {/* Main Content */}
           <div className="flex-1">
@@ -46,16 +44,6 @@ function App() {
               isDarkMode ? 'border-gray-700 bg-gray-800' : 'border-surface-200 bg-element'
             }`}>
               <div className="flex items-center space-x-4">
-                <button
-                  onClick={() => setIsSidebarExpanded(!isSidebarExpanded)}
-                  className={`p-2 rounded-full ${
-                    isDarkMode 
-                      ? 'hover:bg-gray-700 text-gray-300' 
-                      : 'hover:bg-surface-100 text-surface-600'
-                  }`}
-                >
-                  <span className="text-xl">☰</span>
-                </button>
                 <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-surface-900'}`}>
                   Perfect List
                 </h1>

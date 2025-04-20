@@ -5,7 +5,6 @@ import { ShoppingList } from '../models/ShoppingList';
 interface SidebarProps {
   currentList: string | null;
   setCurrentList: (list: string | null) => void;
-  isExpanded: boolean;
 }
 
 interface ListItem {
@@ -14,7 +13,7 @@ interface ListItem {
   isEditing?: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpanded }) => {
+const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList }) => {
   const [lists, setLists] = useState<ListItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [newListName, setNewListName] = useState('');
@@ -171,56 +170,46 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
   }
 
   return (
-    <div className={`w-full xl:w-80 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 transition-all duration-300`}>
+    <div className="w-full xl:w-80 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6">
       <div className="p-4">
-        {isExpanded ? (
-          isCreating ? (
-            <form onSubmit={createNewList} className="space-y-2">
-              <input
-                type="text"
-                value={newListName}
-                onChange={(e) => setNewListName(e.target.value)}
-                placeholder="List name..."
-                className="w-full px-3 py-2 border border-surface-200 dark:border-gray-600 rounded-lg 
-                         dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-                autoFocus
-              />
-              <div className="flex space-x-2">
-                <button
-                  type="submit"
-                  className="flex-1 bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-lg 
-                           flex items-center justify-center space-x-1"
-                >
-                  <span className="text-xl">✅</span>
-                  <span>Create</span>
-                </button>
-                <button
-                  type="button"
-                  onClick={cancelCreatingList}
-                  className="flex-1 bg-surface-100 dark:bg-gray-600 hover:bg-surface-200 dark:hover:bg-gray-500 
-                           text-surface-800 dark:text-gray-200 px-3 py-2 rounded-lg flex items-center justify-center space-x-1"
-                >
-                  <span className="text-xl">❌</span>
-                  <span>Cancel</span>
-                </button>
-              </div>
-            </form>
-          ) : (
-            <button 
-              onClick={startCreatingList}
-              className="w-full flex items-center justify-center space-x-2 btn-primary"
-            >
-              <span className="text-xl">➕</span>
-              <span>New list</span>
-            </button>
-          )
+        {isCreating ? (
+          <form onSubmit={createNewList} className="space-y-2">
+            <input
+              type="text"
+              value={newListName}
+              onChange={(e) => setNewListName(e.target.value)}
+              placeholder="List name..."
+              className="w-full px-3 py-2 border border-surface-200 dark:border-gray-600 rounded-lg 
+                       dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+              autoFocus
+            />
+            <div className="flex space-x-2">
+              <button
+                type="submit"
+                className="flex-1 bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-lg 
+                         flex items-center justify-center space-x-1"
+              >
+                <span className="text-xl">✅</span>
+                <span>Create</span>
+              </button>
+              <button
+                type="button"
+                onClick={cancelCreatingList}
+                className="flex-1 bg-surface-100 dark:bg-gray-600 hover:bg-surface-200 dark:hover:bg-gray-500 
+                         text-surface-800 dark:text-gray-200 px-3 py-2 rounded-lg flex items-center justify-center space-x-1"
+              >
+                <span className="text-xl">❌</span>
+                <span>Cancel</span>
+              </button>
+            </div>
+          </form>
         ) : (
           <button 
             onClick={startCreatingList}
-            className="w-8 h-8 flex items-center justify-center bg-primary-600 hover:bg-primary-700 
-                     text-white rounded-lg transition-colors mx-auto"
+            className="w-full flex items-center justify-center space-x-2 btn-primary"
           >
             <span className="text-xl">➕</span>
+            <span>New list</span>
           </button>
         )}
       </div>
@@ -234,102 +223,82 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
                 : 'hover:bg-surface-50 dark:hover:bg-gray-700/50'
             }`}
           >
-            {isExpanded ? (
-              editingName.hasOwnProperty(list.id) ? (
-                <div className="flex items-center gap-1">
-                  <input
-                    type="text"
-                    value={editingName[list.id]}
-                    onChange={(e) => setEditingName({ ...editingName, [list.id]: e.target.value })}
-                    className="w-[calc(100%-4rem)] px-2 py-1 border border-surface-200 dark:border-gray-600 rounded 
-                             dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
-                    autoFocus
-                  />
-                  <div className="flex gap-1">
-                    <button
-                      onClick={() => saveListName(list.id)}
-                      className="p-1 hover:bg-green-100 dark:hover:bg-green-900/20 rounded"
-                    >
-                      <span className="text-xl">✅</span>
-                    </button>
-                    <button
-                      onClick={() => cancelEditing(list.id)}
-                      className="p-1 hover:bg-red-100 dark:hover:bg-red-900/20 rounded"
-                    >
-                      <span className="text-xl">❌</span>
-                    </button>
-                  </div>
-                </div>
-              ) : deletingList === list.id ? (
-                <div className="flex items-center justify-between space-x-2">
-                  <span className="text-sm text-red-600 dark:text-red-400">Delete the list?</span>
-                  <div className="flex space-x-1">
-                    <button
-                      onClick={() => deleteList(list.id)}
-                      className="p-1 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/20 rounded"
-                    >
-                      <span className="text-xl">✅</span>
-                    </button>
-                    <button
-                      onClick={() => setDeletingList(null)}
-                      className="p-1 text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700/20 rounded"
-                    >
-                      <span className="text-xl">❌</span>
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center justify-between">
+            {editingName.hasOwnProperty(list.id) ? (
+              <div className="flex items-center gap-1">
+                <input
+                  type="text"
+                  value={editingName[list.id]}
+                  onChange={(e) => setEditingName({ ...editingName, [list.id]: e.target.value })}
+                  className="w-[calc(100%-4rem)] px-2 py-1 border border-surface-200 dark:border-gray-600 rounded 
+                           dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  autoFocus
+                />
+                <div className="flex gap-1">
                   <button
-                    onClick={() => setCurrentList(list.id)}
-                    className="flex items-center space-x-3 flex-1 text-left"
+                    onClick={() => saveListName(list.id)}
+                    className="p-1 text-green-600 hover:bg-green-100 dark:hover:bg-green-900/20 rounded"
                   >
-                    <span className={`text-xl ${
-                      currentList === list.id
-                        ? 'text-primary-600 dark:text-primary-400'
-                        : 'text-surface-700 dark:text-gray-300'
-                    }`}>📋</span>
-                    <span className={`${
-                      currentList === list.id
-                        ? 'text-primary-600 dark:text-primary-400'
-                        : 'text-surface-700 dark:text-gray-300'
-                    }`}>
-                      {list.name}
-                    </span>
+                    <span className="text-xl">✅</span>
                   </button>
-                  <div className="flex space-x-1">
-                    <button
-                      onClick={() => startEditing(list)}
-                      className="p-1 hover:bg-surface-100 dark:hover:bg-gray-600 rounded"
-                    >
-                      <span className="text-xl">📝</span>
-                    </button>
-                    <button
-                      onClick={() => setDeletingList(list.id)}
-                      className="p-1 hover:bg-surface-100 dark:hover:bg-gray-600 rounded"
-                    >
-                      <span className="text-xl">🗑️</span>
-                    </button>
-                  </div>
+                  <button
+                    onClick={() => cancelEditing(list.id)}
+                    className="p-1 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/20 rounded"
+                  >
+                    <span className="text-xl">❌</span>
+                  </button>
                 </div>
-              )
+              </div>
             ) : (
-              <button
-                onClick={() => setCurrentList(list.id)}
-                className="w-8 h-8 mx-auto flex items-center justify-center"
-              >
-                <span className={`text-xl ${
-                  currentList === list.id
-                    ? 'text-primary-600 dark:text-primary-400'
-                    : 'text-surface-700 dark:text-gray-300'
-                }`}>📋</span>
-              </button>
+              <div className="flex items-center justify-between">
+                <button
+                  onClick={() => setCurrentList(list.id)}
+                  className="flex-1 text-left hover:text-primary-600 dark:hover:text-primary-400"
+                >
+                  {list.name}
+                </button>
+                <div className="flex gap-1">
+                  <button
+                    onClick={() => startEditing(list)}
+                    className="p-1 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900/20 rounded"
+                  >
+                    <span className="text-xl">✏️</span>
+                  </button>
+                  <button
+                    onClick={() => setDeletingList(list.id)}
+                    className="p-1 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/20 rounded"
+                  >
+                    <span className="text-xl">🗑️</span>
+                  </button>
+                </div>
+              </div>
+            )}
+            {deletingList === list.id && (
+              <div className="mt-2 p-2 bg-red-100 dark:bg-red-900/20 rounded">
+                <p className="text-sm text-red-800 dark:text-red-200">
+                  Are you sure you want to delete this list?
+                </p>
+                <div className="flex gap-2 mt-2">
+                  <button
+                    onClick={() => deleteList(list.id)}
+                    className="flex-1 bg-red-600 hover:bg-red-700 text-white px-2 py-1 rounded text-sm"
+                  >
+                    Delete
+                  </button>
+                  <button
+                    onClick={() => setDeletingList(null)}
+                    className="flex-1 bg-surface-200 dark:bg-gray-700 hover:bg-surface-300 dark:hover:bg-gray-600 
+                             text-surface-800 dark:text-gray-200 px-2 py-1 rounded text-sm"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
             )}
           </div>
         ))}
       </nav>
     </div>
   );
-}
+};
 
-export default Sidebar
+export default Sidebar;
