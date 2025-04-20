@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Search, Plus, Loader2, Trash2, ChevronDown, ChevronRight } from 'lucide-react';
 import Parse from '../parseConfig';
 import { ShoppingList as ShoppingListModel, ShoppingItem, CATEGORIES, Category } from '../models/ShoppingList';
 import debounce from 'lodash/debounce';
@@ -25,6 +24,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
   const [isLoadingSuggestions, setIsLoadingSuggestions] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [ingredientsCache, setIngredientsCache] = useState<Map<string, string[]>>(new Map());
+  const [isExpanded, setIsExpanded] = useState(false);
 
   useEffect(() => {
     if (currentList) {
@@ -224,7 +224,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
   if (loading) {
     return (
       <div className="flex items-center justify-center h-full">
-        <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
+        <span className="text-2xl animate-spin">🔄</span>
       </div>
     );
   }
@@ -265,7 +265,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
                   : 'bg-element border-surface-200 text-surface-900 placeholder-surface-500'
               } focus:outline-none focus:ring-2 focus:ring-primary-500`}
             />
-            <Search className={`absolute left-3 top-2.5 h-5 w-5 ${isDarkMode ? 'text-gray-400' : 'text-surface-400'}`} />
+            <span className={`absolute left-3 top-2.5 text-xl ${isDarkMode ? 'text-gray-400' : 'text-surface-400'}`}>🔍</span>
             
             {showSuggestions && (suggestions.length > 0 || isLoadingSuggestions) && (
               <div className={`absolute z-10 w-full mt-1 rounded-lg shadow-lg ${
@@ -273,7 +273,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
               }`}>
                 {isLoadingSuggestions ? (
                   <div className="p-2 flex justify-center">
-                    <Loader2 className="h-4 w-4 animate-spin text-primary-500" />
+                    <span className="text-xl animate-spin">🔄</span>
                   </div>
                 ) : (
                   suggestions.map((suggestion, index) => (
@@ -309,9 +309,9 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
           </select>
           <button
             type="submit"
-            className="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 flex items-center space-x-2"
+            className="btn-secondary flex items-center space-x-2"
           >
-            <Plus size={20} />
+            <span className="text-xl">➕</span>
             <span>Add</span>
           </button>
         </form>
@@ -330,9 +330,19 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
             >
               <span className="font-medium">{category} ({categoryItems.length})</span>
               {expandedCategories.has(category) ? (
-                <ChevronDown size={20} />
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="p-2 rounded-full hover:bg-surface-100 dark:hover:bg-gray-700"
+                >
+                  <span className="text-xl">{isExpanded ? '⬇️' : '➡️'}</span>
+                </button>
               ) : (
-                <ChevronRight size={20} />
+                <button
+                  onClick={() => setIsExpanded(!isExpanded)}
+                  className="p-2 rounded-full hover:bg-surface-100 dark:hover:bg-gray-700"
+                >
+                  <span className="text-xl">{isExpanded ? '⬇️' : '➡️'}</span>
+                </button>
               )}
             </button>
             
@@ -354,9 +364,9 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
                     </span>
                     <button
                       onClick={() => deleteItem(item.id)}
-                      className="ml-2 text-surface-400 hover:text-red-500"
+                      className="p-2 rounded-full hover:bg-surface-100 dark:hover:bg-gray-700"
                     >
-                      <Trash2 size={16} />
+                      <span className="text-xl">🗑️</span>
                     </button>
                   </div>
                 ))}

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { LogIn, UserPlus, X } from 'lucide-react';
 import Parse from '../parseConfig';
 
 interface AuthProps {
@@ -58,7 +57,7 @@ const Auth: React.FC<AuthProps> = ({ onLogin, isDarkMode }) => {
               className="absolute top-0 right-0 px-4 py-3"
               onClick={() => setError('')}
             >
-              <X size={16} />
+              <span className="text-xl">❌</span>
             </button>
           </div>
         )}
@@ -106,13 +105,11 @@ const Auth: React.FC<AuthProps> = ({ onLogin, isDarkMode }) => {
           >
             {isLogin ? (
               <>
-                <LogIn size={20} />
-                <span>Login</span>
+                <span className="text-xl">🔑</span> Login
               </>
             ) : (
               <>
-                <UserPlus size={20} />
-                <span>Sign Up</span>
+                <span className="text-xl">👤</span> Register
               </>
             )}
           </button>
@@ -121,9 +118,9 @@ const Auth: React.FC<AuthProps> = ({ onLogin, isDarkMode }) => {
         <div className="mt-4 text-center">
           <button
             onClick={() => setIsLogin(!isLogin)}
-            className={`text-sm ${isDarkMode ? 'text-primary-400' : 'text-primary-600'} hover:underline`}
+            className="text-primary-600 dark:text-primary-400 hover:underline"
           >
-            {isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login"}
+            {isLogin ? 'Create an account' : 'Already have an account?'}
           </button>
         </div>
       </div>

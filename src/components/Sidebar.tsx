@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { List, History, Share2, Plus, Loader2, Edit2, Check, X, Trash2 } from 'lucide-react';
+import { List, Plus, Loader2, Edit2, Check, X, Trash2 } from 'lucide-react';
 import Parse from '../parseConfig';
 import { ShoppingList } from '../models/ShoppingList';
 
@@ -166,7 +166,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
   if (loading) {
     return (
       <div className={`${isExpanded ? 'w-64' : 'w-16'} bg-element dark:bg-gray-800 border-r border-surface-200 dark:border-gray-700 flex items-center justify-center h-screen transition-all duration-300`}>
-        <Loader2 className="h-8 w-8 animate-spin text-primary-500" />
+        <span className="text-2xl animate-spin">🔄</span>
       </div>
     );
   }
@@ -192,7 +192,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
                   className="flex-1 bg-primary-600 hover:bg-primary-700 text-white px-3 py-2 rounded-lg 
                            flex items-center justify-center space-x-1"
                 >
-                  <Check size={16} />
+                  <span className="text-xl">✅</span>
                   <span>Create</span>
                 </button>
                 <button
@@ -201,7 +201,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
                   className="flex-1 bg-surface-100 dark:bg-gray-600 hover:bg-surface-200 dark:hover:bg-gray-500 
                            text-surface-800 dark:text-gray-200 px-3 py-2 rounded-lg flex items-center justify-center space-x-1"
                 >
-                  <X size={16} />
+                  <span className="text-xl">❌</span>
                   <span>Cancel</span>
                 </button>
               </div>
@@ -209,10 +209,9 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
           ) : (
             <button 
               onClick={startCreatingList}
-              className="w-full flex items-center justify-center space-x-2 bg-primary-600 hover:bg-primary-700 
-                       text-white px-4 py-2 rounded-lg transition-colors"
+              className="w-full flex items-center justify-center space-x-2 btn-primary"
             >
-              <Plus size={20} />
+              <span className="text-xl">➕</span>
               <span>New list</span>
             </button>
           )
@@ -222,7 +221,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
             className="w-8 h-8 flex items-center justify-center bg-primary-600 hover:bg-primary-700 
                      text-white rounded-lg transition-colors mx-auto"
           >
-            <Plus size={20} />
+            <span className="text-xl">➕</span>
           </button>
         )}
       </div>
@@ -252,13 +251,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
                       onClick={() => saveListName(list.id)}
                       className="p-1 hover:bg-green-100 dark:hover:bg-green-900/20 rounded"
                     >
-                      <Check size={16} className="text-green-600 dark:text-green-400" />
+                      <span className="text-xl">✅</span>
                     </button>
                     <button
                       onClick={() => cancelEditing(list.id)}
                       className="p-1 hover:bg-red-100 dark:hover:bg-red-900/20 rounded"
                     >
-                      <X size={16} className="text-red-600 dark:text-red-400" />
+                      <span className="text-xl">❌</span>
                     </button>
                   </div>
                 </div>
@@ -270,13 +269,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
                       onClick={() => deleteList(list.id)}
                       className="p-1 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/20 rounded"
                     >
-                      <Check size={16} />
+                      <span className="text-xl">✅</span>
                     </button>
                     <button
                       onClick={() => setDeletingList(null)}
                       className="p-1 text-surface-600 dark:text-surface-400 hover:bg-surface-100 dark:hover:bg-surface-700/20 rounded"
                     >
-                      <X size={16} />
+                      <span className="text-xl">❌</span>
                     </button>
                   </div>
                 </div>
@@ -286,11 +285,11 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
                     onClick={() => setCurrentList(list.id)}
                     className="flex items-center space-x-3 flex-1 text-left"
                   >
-                    <List size={20} className={`${
+                    <span className={`text-xl ${
                       currentList === list.id
                         ? 'text-primary-600 dark:text-primary-400'
                         : 'text-surface-700 dark:text-gray-300'
-                    }`} />
+                    }`}>📋</span>
                     <span className={`${
                       currentList === list.id
                         ? 'text-primary-600 dark:text-primary-400'
@@ -304,13 +303,13 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
                       onClick={() => startEditing(list)}
                       className="p-1 hover:bg-surface-100 dark:hover:bg-gray-600 rounded"
                     >
-                      <Edit2 size={16} className="text-primary-500 dark:text-gray-400" />
+                      <span className="text-lg">📝</span>
                     </button>
                     <button
                       onClick={() => setDeletingList(list.id)}
                       className="p-1 hover:bg-surface-100 dark:hover:bg-gray-600 rounded"
                     >
-                      <Trash2 size={16} className="text-primary-500 dark:text-gray-400" />
+                      <span className="text-lg">🗑️</span>
                     </button>
                   </div>
                 </div>
@@ -320,11 +319,11 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList, isExpand
                 onClick={() => setCurrentList(list.id)}
                 className="w-8 h-8 mx-auto flex items-center justify-center"
               >
-                <List size={20} className={`${
+                <span className={`text-xl ${
                   currentList === list.id
                     ? 'text-primary-600 dark:text-primary-400'
                     : 'text-surface-700 dark:text-gray-300'
-                }`} />
+                }`}>📋</span>
               </button>
             )}
           </div>

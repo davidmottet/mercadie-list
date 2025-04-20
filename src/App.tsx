@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { Moon, Sun, LogOut, Menu } from 'lucide-react';
 import ShoppingList from './components/ShoppingList';
 import Sidebar from './components/Sidebar';
 import Auth from './components/Auth';
@@ -53,7 +52,7 @@ function App() {
                     : 'hover:bg-surface-100 text-surface-600'
                 }`}
               >
-                <Menu size={20} />
+                <span className="text-xl">☰</span>
               </button>
               <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-surface-900'}`}>
                 Perfect List
@@ -71,7 +70,7 @@ function App() {
                     : 'hover:bg-surface-100 text-surface-600'
                 }`}
               >
-                {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
+                <span className="text-xl">{isDarkMode ? '☀️' : '🌙'}</span>
               </button>
               <button
                 onClick={handleLogout}
@@ -81,7 +80,7 @@ function App() {
                     : 'hover:bg-surface-100 text-surface-600'
                 }`}
               >
-                <LogOut size={20} />
+                <span className="text-xl">🚪</span>
               </button>
             </div>
           </header>
