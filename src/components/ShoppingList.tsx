@@ -325,7 +325,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
           <div key={category}>
             <button
               onClick={() => toggleCategory(category)}
-              className={`w-full flex items-center justify-between p-4 ${
+              className={`w-full flex items-center justify-between px-4 ${
                 isDarkMode ? 'bg-gray-700' : 'bg-white'
               } rounded-lg mb-2`}
             >
@@ -343,7 +343,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
                 {categoryItems.map(item => (
                   <div
                     key={item.id}
-                    className="flex items-center px-4 py-3 hover:bg-surface-50 dark:hover:bg-gray-700/50 rounded-lg"
+                    className="flex items-center px-4 py-1 hover:bg-surface-50 dark:hover:bg-gray-700/50 rounded-lg"
                   >
                     <input
                       type="checkbox"
@@ -363,9 +363,6 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
                   </div>
                 ))}
               </div>
-            )}
-            {index < Object.keys(groupedItems).length - 1 && (
-              <div className="h-px bg-gray-200 dark:bg-gray-700 my-4" />
             )}
           </div>
         ))}
