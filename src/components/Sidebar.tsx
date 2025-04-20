@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { List, Plus, Loader2, Edit2, Check, X, Trash2 } from 'lucide-react';
 import Parse from '../parseConfig';
 import { ShoppingList } from '../models/ShoppingList';
 
