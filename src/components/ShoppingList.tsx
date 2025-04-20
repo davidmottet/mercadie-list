@@ -321,7 +321,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
       </div>
 
       <div className="flex-1 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6">
-        {Object.entries(groupedItems).map(([category, categoryItems], index) => (
+        {Object.entries(groupedItems).map(([category, categoryItems]) => (
           <div key={category}>
             <button
               onClick={() => toggleCategory(category)}
