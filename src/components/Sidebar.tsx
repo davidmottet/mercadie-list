@@ -163,14 +163,14 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList }) => {
 
   if (loading) {
     return (
-      <div className="w-full xl:w-80 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6 flex items-center justify-center">
+      <div className="w-full xl:w-80 bg-gray-50 rounded-lg shadow-lg p-6 flex items-center justify-center">
         <span className="text-2xl animate-spin">🔄</span>
       </div>
     );
   }
 
   return (
-    <div className="w-full xl:w-80 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6">
+    <div className="w-full xl:w-80 bg-gray-50 rounded-lg shadow-lg p-6">
       <div className="p-4">
         {isCreating ? (
           <form onSubmit={createNewList} className="space-y-2">
@@ -180,8 +180,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList }) => {
                 value={newListName}
                 onChange={(e) => setNewListName(e.target.value)}
                 placeholder="List name..."
-                className="w-full px-3 py-2 pr-24 border border-surface-200 dark:border-gray-600 rounded-lg 
-                         dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                className="w-full px-3 py-2 pr-24 border border-surface-200 rounded-lg bg-element text-surface-900 focus:outline-none focus:ring-2 focus:ring-primary-500"
                 autoFocus
               />
               <div className="absolute right-0 top-0 h-full flex">
@@ -195,8 +194,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList }) => {
                 <button
                   type="button"
                   onClick={cancelCreatingList}
-                  className="h-full px-3 bg-surface-100 dark:bg-gray-600 hover:bg-surface-200 rounded-r-lg dark:hover:bg-gray-500 
-                           text-surface-800 dark:text-gray-200 flex items-center justify-center"
+                  className="h-full px-3 bg-surface-100 hover:bg-surface-200 rounded-r-lg text-surface-800 flex items-center justify-center"
                 >
                   <span className="text-xl">❌</span>
                 </button>
@@ -219,8 +217,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList }) => {
             key={list.id}
             className={`px-4 py-3 ${
               currentList === list.id
-                ? 'bg-surface-100 dark:bg-primary-900/20'
-                : 'hover:bg-surface-50 dark:hover:bg-gray-700/50'
+                ? 'bg-surface-100'
+                : 'hover:bg-surface-50'
             }`}
           >
             {editingName.hasOwnProperty(list.id) ? (
@@ -229,20 +227,19 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList }) => {
                   type="text"
                   value={editingName[list.id]}
                   onChange={(e) => setEditingName({ ...editingName, [list.id]: e.target.value })}
-                  className="w-[calc(100%-4rem)] px-2 py-1 border border-surface-200 dark:border-gray-600 rounded 
-                           dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  className="w-[calc(100%-4rem)] px-2 py-1 border border-surface-200 rounded bg-element text-surface-900 focus:outline-none focus:ring-2 focus:ring-primary-500"
                   autoFocus
                 />
                 <div className="flex gap-1">
                   <button
                     onClick={() => saveListName(list.id)}
-                    className="p-1 text-green-600 hover:bg-green-100 dark:hover:bg-green-900/20 rounded"
+                    className="p-1 text-green-600 hover:bg-green-100 rounded"
                   >
                     <span className="text-xl">✅</span>
                   </button>
                   <button
                     onClick={() => cancelEditing(list.id)}
-                    className="p-1 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/20 rounded"
+                    className="p-1 text-red-600 hover:bg-red-100 rounded"
                   >
                     <span className="text-xl">❌</span>
                   </button>
@@ -252,20 +249,20 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList }) => {
               <div className="flex items-center justify-between">
                 <button
                   onClick={() => setCurrentList(list.id)}
-                  className="flex-1 text-left hover:text-primary-600 dark:hover:text-primary-400"
+                  className="flex-1 text-left hover:text-primary-600"
                 >
                   {list.name}
                 </button>
                 <div className="flex gap-1">
                   <button
                     onClick={() => startEditing(list)}
-                    className="p-1 text-blue-600 hover:bg-blue-100 dark:hover:bg-blue-900/20 rounded"
+                    className="p-1 text-blue-600 hover:bg-blue-100 rounded"
                   >
                     <span className="text-xl">✏️</span>
                   </button>
                   <button
                     onClick={() => setDeletingList(list.id)}
-                    className="p-1 text-red-600 hover:bg-red-100 dark:hover:bg-red-900/20 rounded"
+                    className="p-1 text-red-600 hover:bg-red-100 rounded"
                   >
                     <span className="text-xl">🗑️</span>
                   </button>
@@ -273,8 +270,8 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList }) => {
               </div>
             )}
             {deletingList === list.id && (
-              <div className="mt-2 p-2 bg-red-100 dark:bg-red-900/20 rounded">
-                <p className="text-sm text-red-800 dark:text-red-200">
+              <div className="mt-2 p-2 bg-red-100 rounded">
+                <p className="text-sm text-red-800">
                   Are you sure you want to delete this list?
                 </p>
                 <div className="flex gap-2 mt-2">
@@ -286,8 +283,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentList, setCurrentList }) => {
                   </button>
                   <button
                     onClick={() => setDeletingList(null)}
-                    className="flex-1 bg-surface-200 dark:bg-gray-700 hover:bg-surface-300 dark:hover:bg-gray-600 
-                             text-surface-800 dark:text-gray-200 px-2 py-1 rounded text-sm"
+                    className="flex-1 bg-surface-200 hover:bg-surface-300 text-surface-800 px-2 py-1 rounded text-sm"
                   >
                     Cancel
                   </button>

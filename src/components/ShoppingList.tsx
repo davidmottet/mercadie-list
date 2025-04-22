@@ -4,7 +4,6 @@ import { ShoppingList as ShoppingListModel, ShoppingItem, CATEGORIES, Category }
 import debounce from 'lodash/debounce';
 
 interface ShoppingListProps {
-  isDarkMode: boolean;
   currentList: string | null;
 }
 
@@ -12,7 +11,7 @@ interface GroupedItems {
   [key: string]: ShoppingItem[];
 }
 
-const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) => {
+const ShoppingList: React.FC<ShoppingListProps> = ({ currentList }) => {
   const [items, setItems] = useState<ShoppingItem[]>([]);
   const [newItem, setNewItem] = useState('');
   const [loading, setLoading] = useState(true);
@@ -232,7 +231,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
   if (!currentListObj) {
     return (
       <div className="flex items-center justify-center h-full">
-        <div className={`text-center ${isDarkMode ? 'text-gray-400' : 'text-surface-600'}`}>
+        <div className="text-center text-surface-600">
           <p>Select a list or create a new one</p>
         </div>
       </div>
@@ -242,7 +241,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
   const groupedItems = groupItemsByCategory(items);
 
   return (
-    <div className={`mx-auto ${isDarkMode ? 'text-white' : 'text-surface-900'}`}>
+    <div className="mx-auto text-surface-900">
       {error && (
         <div className="mb-4 p-3 bg-red-100 text-red-700 rounded-lg">
           {error}
@@ -259,8 +258,8 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
               onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
               onFocus={() => setShowSuggestions(true)}
               placeholder="Add an item..."
-              className={`w-full px-6 py-3 bg-white dark:bg-gray-800 rounded-full shadow-lg border-0 focus:ring-2 focus:ring-primary-500 ${
-                isDarkMode ? 'text-white placeholder-gray-400' : 'text-surface-900 placeholder-surface-500'
+              className={`w-full px-6 py-3 bg-white rounded-full shadow-lg border-0 focus:ring-2 focus:ring-primary-500 ${
+                'text-surface-900 placeholder-surface-500'
               }`}
             />
             <button 
@@ -272,7 +271,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
             
             {showSuggestions && (suggestions.length > 0 || isLoadingSuggestions) && (
               <div className={`absolute z-99 w-full mt-1 rounded-lg shadow-lg ${
-                isDarkMode ? 'bg-gray-800' : 'bg-element'
+                'bg-element'
               }`}>
                 {isLoadingSuggestions ? (
                   <div className="p-2 flex justify-center">
@@ -284,8 +283,8 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
                       key={index}
                       type="button"
                       onClick={() => handleSuggestionClick(suggestion)}
-                      className={`w-full text-left px-4 py-2 hover:bg-surface-100 dark:hover:bg-gray-700 ${
-                        isDarkMode ? 'text-white' : 'text-surface-900'
+                      className={`w-full text-left px-4 py-2 hover:bg-surface-100 ${
+                        'text-surface-900'
                       }`}
                     >
                       {suggestion}
@@ -299,9 +298,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value as Category)}
             className={`w-40 px-3 py-2 rounded-lg border ${
-              isDarkMode 
-                ? 'bg-gray-800 border-gray-700 text-white' 
-                : 'bg-element border-surface-200 text-surface-900'
+              'bg-element border-surface-200 text-surface-900'
             } focus:outline-none focus:ring-2 focus:ring-primary-500`}
           >
             {Object.values(CATEGORIES).map((category) => (
@@ -320,15 +317,15 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
         </form>
       </div>
 
-      <div className="flex-1 bg-gray-50 dark:bg-gray-800 rounded-lg shadow-lg p-6">
+      <div className="flex-1 bg-gray-50 rounded-lg shadow-lg p-6">
         <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
           <span>🛒</span>
           Shopping List
         </h2>
         {Object.keys(groupedItems).length === 0 ? (
           <div className="text-center py-8">
-            <p className="text-lg text-gray-500 dark:text-gray-400 mb-2">Your cart is empty!</p>
-            <p className="text-sm text-gray-400 dark:text-gray-500">Time to fill it up with goodies! 🍎🥕🥛</p>
+            <p className="text-lg text-gray-500 mb-2">Your cart is empty!</p>
+            <p className="text-sm text-gray-400">Time to fill it up with goodies! 🍎🥕🥛</p>
           </div>
         ) : (
           Object.entries(groupedItems).map(([category, categoryItems]) => (
@@ -336,13 +333,13 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
               <button
                 onClick={() => toggleCategory(category)}
                 className={`w-full flex items-center justify-between px-4 ${
-                  isDarkMode ? 'bg-gray-700' : 'bg-white'
+                  'bg-white'
                 } rounded-lg mb-2`}
               >
                 <span className="font-medium">{category} ({categoryItems.length})</span>
                 <button
                   onClick={() => setIsExpanded(!isExpanded)}
-                  className="p-2 rounded-full hover:bg-surface-100 dark:hover:bg-gray-700"
+                  className="p-2 rounded-full hover:bg-surface-100"
                 >
                   <span className="text-xl">{expandedCategories.has(category) ? '⬇️' : '➡️'}</span>
                 </button>
@@ -353,7 +350,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
                   {categoryItems.map(item => (
                     <div
                       key={item.id}
-                      className="flex items-center px-4 py-1 hover:bg-surface-50 dark:hover:bg-gray-700/50 rounded-lg"
+                      className="flex items-center px-4 py-1 hover:bg-surface-50 rounded-lg"
                     >
                       <input
                         type="checkbox"
@@ -366,7 +363,7 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ isDarkMode, currentList }) 
                       </span>
                       <button
                         onClick={() => deleteItem(item.id)}
-                        className="p-2 rounded-full hover:bg-surface-100 dark:hover:bg-gray-700"
+                        className="p-2 rounded-full hover:bg-surface-100"
                       >
                         <span className="text-xl">🗑️</span>
                       </button>
