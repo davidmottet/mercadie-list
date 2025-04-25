@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import ShoppingList from './components/ShoppingList';
 import Sidebar from './components/Sidebar';
 import Auth from './components/Auth';
+import Navbar from './components/Navbar';
 import Parse from './parseConfig';
 
 function App() {
@@ -24,6 +25,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-app">
+      <Navbar isAuthenticated={isAuthenticated} onLogout={handleLogout} />
       <div className="container mx-auto px-4 md:px-0">
         <div className="flex flex-col xl:flex-row gap-6 py-6">
           {/* Sidebar */}

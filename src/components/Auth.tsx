@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Parse from '../parseConfig';
 
 interface AuthProps {
@@ -10,6 +10,29 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+
+  // Check for existing session on component mount
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const currentUser = Parse.User.current();
+        if (currentUser) {
+          // Verify the session is still valid
+          const session = await Parse.Session.current();
+          if (session) {
+            onLogin();
+          } else {
+            // Session is invalid, log out
+            await Parse.User.logOut();
+          }
+        }
+      } catch (error) {
+        console.error('Session check failed:', error);
+      }
+    };
+
+    checkSession();
+  }, [onLogin]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,27 +66,30 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center px-4 bg-app">
-      <div className="w-full max-w-md p-8 rounded-lg shadow-soft bg-element">
-        <h2 className="text-2xl font-bold mb-6 text-surface-900">
-          {isLogin ? 'Login' : 'Sign Up'}
+    <div className="min-h-screen flex items-center justify-center px-4 bg-gray-100">
+      <div className="w-full max-w-md p-8 rounded-xl shadow-2xl bg-white">
+        <h2 className="text-3xl font-bold mb-8 text-center text-gray-800">
+          {isLogin ? 'Connexion' : 'Inscription'}
         </h2>
 
         {error && (
-          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded relative">
-            <span className="block sm:inline">{error}</span>
+          <div className="mb-6 p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded-lg">
+            <div className="flex items-center">
+              <span className="text-xl mr-2">⚠️</span>
+              <span>{error}</span>
+            </div>
             <button
-              className="absolute top-0 right-0 px-4 py-3"
+              className="mt-2 text-red-600 hover:text-red-800"
               onClick={() => setError('')}
             >
-              <span className="text-xl">❌</span>
+              Fermer
             </button>
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-surface-700">
+            <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-2">
               Email
             </label>
             <input
@@ -71,47 +97,51 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-1 block w-full rounded-md shadow-sm bg-element border-surface-200 text-surface-900 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
+              placeholder="votre@email.com"
               required
             />
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-surface-700">
-              Password
+            <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-2">
+              Mot de passe
             </label>
             <input
               type="password"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className="mt-1 block w-full rounded-md shadow-sm bg-element border-surface-200 text-surface-900 focus:ring-primary-500 focus:border-primary-500"
+              className="w-full px-4 py-3 rounded-lg border-2 border-gray-300 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition duration-200"
+              placeholder="••••••••"
               required
             />
           </div>
 
           <button
             type="submit"
-            className="w-full flex items-center justify-center space-x-2 bg-primary-600 text-white py-2 px-4 rounded-md hover:bg-primary-700 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2"
+            className="w-full py-3 px-4 bg-blue-600 text-white font-semibold rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
           >
             {isLogin ? (
-              <>
-                <span className="text-xl">🔑</span> Login
-              </>
+              <div className="flex items-center justify-center space-x-2">
+                <span className="text-xl">🔑</span>
+                <span>Se connecter</span>
+              </div>
             ) : (
-              <>
-                <span className="text-xl">👤</span> Register
-              </>
+              <div className="flex items-center justify-center space-x-2">
+                <span className="text-xl">✨</span>
+                <span>Créer un compte</span>
+              </div>
             )}
           </button>
         </form>
 
-        <div className="mt-4 text-center">
+        <div className="mt-6 text-center">
           <button
             onClick={() => setIsLogin(!isLogin)}
-            className="text-primary-600 hover:underline"
+            className="text-blue-600 hover:text-blue-800 font-medium transition duration-200"
           >
-            {isLogin ? 'Create an account' : 'Already have an account?'}
+            {isLogin ? 'Pas encore de compte ? S\'inscrire' : 'Déjà un compte ? Se connecter'}
           </button>
         </div>
       </div>
