@@ -1,8 +1,6 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-  ],
+export default {
+  content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
     extend: {
       fontFamily: {
@@ -10,15 +8,18 @@ module.exports = {
       },
       colors: {
         primary: {
-          DEFAULT: 'rgb(var(--color-primary) / <alpha-value>)',
-          light: 'rgb(var(--color-primary-light) / <alpha-value>)',
+          DEFAULT: '#2563eb',
+          dark: '#1d4ed8',
+          light: '#3b82f6',
         },
         secondary: {
-          DEFAULT: 'rgb(var(--color-secondary) / <alpha-value>)',
-          light: 'rgb(var(--color-secondary-light) / <alpha-value>)',
+          DEFAULT: '#64748b',
+          dark: '#475569',
+          light: '#94a3b8',
         },
         background: {
-          DEFAULT: 'rgb(var(--color-background) / <alpha-value>)',
+          DEFAULT: '#f8fafc',
+          dark: '#f1f5f9',
         },
       },
       boxShadow: {
@@ -28,4 +29,4 @@ module.exports = {
     },
   },
   plugins: [],
-} 
+}
