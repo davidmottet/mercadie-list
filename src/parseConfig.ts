@@ -1,4 +1,5 @@
 import Parse from 'parse';
+import './parseModels';
 
 // Initialize Parse
 Parse.initialize(

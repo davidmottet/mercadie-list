@@ -10,6 +10,7 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isCheckingSession, setIsCheckingSession] = useState(true);
 
   // Check for existing session on component mount
   useEffect(() => {
@@ -17,17 +18,33 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
       try {
         const currentUser = Parse.User.current();
         if (currentUser) {
-          // Verify the session is still valid
-          const session = await Parse.Session.current();
-          if (session) {
-            onLogin();
-          } else {
-            // Session is invalid, log out
+          try {
+            // Vérifier si la session est valide
+            const sessionToken = currentUser.getSessionToken();
+            if (sessionToken) {
+              // Attendre que l'utilisateur soit complètement authentifié
+              await Parse.User.become(sessionToken);
+              const user = await Parse.User.currentAsync();
+              if (user && user.authenticated()) {
+                onLogin();
+              } else {
+                await Parse.User.logOut();
+                console.log('Session invalide, déconnexion...');
+              }
+            } else {
+              await Parse.User.logOut();
+              console.log('Session token manquant, déconnexion...');
+            }
+          } catch (error) {
+            // Si la session n'est pas valide, déconnecter l'utilisateur
             await Parse.User.logOut();
+            console.log('Session invalide, déconnexion...');
           }
         }
       } catch (error) {
         console.error('Session check failed:', error);
+      } finally {
+        setIsCheckingSession(false);
       }
     };
 
@@ -39,23 +56,26 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
     setError('');
 
     try {
+      let user;
       if (isLogin) {
-        const user = await Parse.User.logIn(email, password);
+        user = await Parse.User.logIn(email, password);
         if (!user) {
           throw new Error('Failed to authenticate user');
         }
       } else {
-        const user = new Parse.User();
+        user = new Parse.User();
         user.set("username", email);
         user.set("email", email);
         user.set("password", password);
-        const result = await user.signUp();
-        if (!result) {
+        user = await user.signUp();
+        if (!user) {
           throw new Error('Failed to create user account');
         }
       }
       
-      if (Parse.User.current()) {
+      // Attendre que l'utilisateur soit complètement authentifié
+      const currentUser = await Parse.User.currentAsync();
+      if (currentUser && currentUser.authenticated()) {
         onLogin();
       } else {
         throw new Error('Authentication succeeded but user session is invalid');
@@ -64,6 +84,14 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
       setError(error.message);
     }
   };
+
+  if (isCheckingSession) {
+    return (
+      <div className="min-h-screen flex items-center justify-center px-4 bg-gray-100">
+        <div className="text-2xl text-gray-700">Vérification de la session...</div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 bg-gray-100">
