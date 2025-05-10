@@ -337,12 +337,15 @@ const ShoppingList: React.FC<ShoppingListProps> = ({ currentList }) => {
                 } rounded-lg mb-2`}
               >
                 <span className="font-medium">{category} ({categoryItems.length})</span>
-                <button
-                  onClick={() => setIsExpanded(!isExpanded)}
-                  className="p-2 rounded-full hover:bg-surface-100"
+                <div
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setIsExpanded(!isExpanded);
+                  }}
+                  className="p-2 rounded-full hover:bg-surface-100 cursor-pointer"
                 >
                   <span className="text-xl">{expandedCategories.has(category) ? '⬇️' : '➡️'}</span>
-                </button>
+                </div>
               </button>
               
               {expandedCategories.has(category) && (
