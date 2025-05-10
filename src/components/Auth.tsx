@@ -16,33 +16,39 @@ const Auth: React.FC<AuthProps> = ({ onLogin }) => {
   useEffect(() => {
     const checkSession = async () => {
       try {
+        // Attendre un peu que Parse initialise correctement
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
         const currentUser = Parse.User.current();
         if (currentUser) {
           try {
             // Vérifier si la session est valide
             const sessionToken = currentUser.getSessionToken();
             if (sessionToken) {
-              // Attendre que l'utilisateur soit complètement authentifié
-              await Parse.User.become(sessionToken);
-              const user = await Parse.User.currentAsync();
-              if (user && user.authenticated()) {
-                onLogin();
-              } else {
-                await Parse.User.logOut();
-                console.log('Session invalide, déconnexion...');
+              try {
+                // Attendre que l'utilisateur soit complètement authentifié
+                await Parse.User.become(sessionToken);
+                const user = await Parse.User.currentAsync();
+                if (user && user.authenticated()) {
+                  onLogin();
+                } else {
+                  console.log('Session non authentifiée, mais on continue...');
+                }
+              } catch (becomeError) {
+                // Ignorer les erreurs de become() et currentAsync()
+                console.log('Erreur lors de la vérification de session, mais on continue...');
               }
             } else {
-              await Parse.User.logOut();
-              console.log('Session token manquant, déconnexion...');
+              console.log('Session token manquant, mais on continue...');
             }
           } catch (error) {
-            // Si la session n'est pas valide, déconnecter l'utilisateur
-            await Parse.User.logOut();
-            console.log('Session invalide, déconnexion...');
+            console.log('Erreur de vérification de session, mais on continue...');
           }
         }
       } catch (error) {
         console.error('Session check failed:', error);
+        // Si la vérification initiale échoue complètement, on déconnecte
+        await Parse.User.logOut();
       } finally {
         setIsCheckingSession(false);
       }
